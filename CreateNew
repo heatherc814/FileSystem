@@ -1,0 +1,533 @@
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+
+public class CreateFile 
+{	
+	public void createNewFile()
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		//Creating new directory on desktop called RootDir
+		File parentDir = new File ("/Users/heatherchan/Desktop/RootDir");
+		
+		/*
+		 * If the root directory doesn't
+		 * exist then create it.
+		 */
+		if (!parentDir.exists())
+		{
+			if (parentDir.mkdir())
+			{
+				System.out.println("A directory named 'ROOT DIR' has just been created.");
+			}
+			
+			else
+				System.out.println("Failed to create new directory.");
+			
+			//Creating the file in directory RootDir
+			try
+			{
+				System.out.println("Enter the name of the file and the desired extension:");
+				String userFileName = userInput.nextLine();
+				File parentFile = new File("/Users/heatherchan/Desktop/RootDir/", userFileName);
+					
+				if (parentFile.createNewFile())
+				{
+					System.out.println("A file " +userFileName+ " has been created!");
+				}
+					
+				else
+					System.out.println("File already exists.");
+			}
+				
+			catch (IOException ioe)
+			{
+				ioe.printStackTrace();
+				System.err.println("Create directory error has occured.");
+			}
+		}	
+		
+		/*
+		 * Creates a sub directory, if
+		 * a root directory already
+		 * exists.
+		 */
+		else if (parentDir.exists())
+		{
+			File childDir = new File("/Users/heatherchan/Desktop/RootDir/Sub");
+			if (!childDir.exists())
+			{
+				if (childDir.mkdirs())
+				{
+					System.out.println("A sub directory name 'SUB' has been created!");
+				}
+				
+				else
+					System.out.println("ERROR! Unable to create sub directory.");
+				
+				/*
+				 * Creates a file inside
+				 * sub directory "SUB"
+				 */
+				try
+				{
+					System.out.println("Enter the name of the file and its extension: ");
+					String userFileName = userInput.nextLine();
+					File childFile = new File("/Users/heatherchan/Desktop/RootDir/Sub", userFileName);
+						
+					if (childFile.createNewFile())
+					{
+						System.out.println("A file named " + userFileName + " has been created"
+								+ " and stored in directory 'SUB'!");
+					}
+						
+					else
+						System.out.println("File already exists.");
+				}
+					
+				catch (IOException ioe)
+				{
+					ioe.printStackTrace();
+				}
+			}
+			
+			/*
+			 * If childDir already exists
+			 * then create a sub directory
+			 * within "ROOTDIR" named SUB1
+			 */
+			else if (childDir.exists())
+			{
+				File childDir2 = new File("/Users/heatherchan/Desktop/RootDir/Sub1");
+				if (!childDir2.exists())
+				{
+					if (childDir2.mkdirs())
+					{
+						System.out.println("A sub directory name 'SUB1' has been created!");
+					}
+						
+					else
+					{
+						System.out.println("ERROR! Unable to create Sub1 directory.");
+					}
+				}
+				
+				/*
+				 * If childDir2 exists,then 
+				 * create a sub directory
+				 * named "SUB2"
+				 */
+				if (childDir2.exists())
+				{
+					File childDir3 = new File("/Users/heatherchan/Desktop/RootDir/Sub1/Sub2");
+					if (!childDir3.exists())
+					{
+						if (childDir3.mkdirs())
+						{
+							System.out.println("A sub directory name 'SUB2' has been created!");
+						}
+						
+						else
+						{
+							System.out.println("ERROR! Unable to create Sub2 directory.");
+						}	
+					
+						/*
+						 * Creating a file and storing
+						 * it in directory "SUB2"
+						 */
+						try
+						{
+							System.out.println("Enter the name of the file and its extension: ");
+							String userFileName = userInput.nextLine();
+							File childFile3 = new File("/Users/heatherchan/Desktop/RootDir/Sub1/Sub2/", userFileName);
+							
+							if (childFile3.createNewFile())
+							{
+								System.out.println("A file named " + userFileName + " has been created"
+										+ " and stored in directory 'SUB2'!");
+							}
+							
+							else
+								System.out.println("File already exists.");
+						}
+						
+						catch (IOException ioe)
+						{
+							ioe.printStackTrace();
+						}
+					}
+				}		
+			}	
+		}
+	}
+	
+	//OPEN SPECIFIED DIRECTORY
+	public void openDir() throws IOException
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		System.out.println("Enter name of directory: ");
+		Path path = Paths.get("/Users/heatherchan/Desktop/", userInput.nextLine());
+		
+		if (Files.exists(path))
+		{
+			System.out.printf("%n%s exists%n", path.getFileName());
+			System.out.printf("%s directory%n",
+					Files.isDirectory(path)? "Is" : "Is not");
+			
+			if (Files.isDirectory(path))
+			{
+				System.out.printf("%nDirectory contents:%n");
+				
+				DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path);
+				
+				for (Path p : directoryStream)
+					System.out.println(p);
+			}
+		}
+		else
+			System.out.printf("%s does not exist%n", path);
+
+		//userInput.close();
+	}
+		
+	//OPEN SPECIFIED FILE FOR READ
+	public void openFile()
+	{			
+		Scanner userInput = new Scanner(System.in);
+		BufferedReader br = null;
+			
+		try
+		{
+			String sCurrentLine;
+			System.out.println("Enter the name of the directory you want to search in: ");
+			String DirSearch = userInput.nextLine();
+			
+			System.out.println("Enter the name of the file with it's extension: ");
+			String fileSearch = userInput.nextLine();
+			
+			br = new BufferedReader (new FileReader
+					("/Users/heatherchan/Desktop/" + DirSearch + "/" + fileSearch));
+			while ((sCurrentLine = br.readLine()) != null)
+			{
+				System.out.println("...Opening file for read...\n\n" + sCurrentLine);
+				
+				File file = new File ("/Users/heatherchan/Desktop/"+DirSearch+ "/" + fileSearch);
+				FileInputStream fis = null;
+				
+				try
+				{
+					fis = new FileInputStream(file);
+					
+					System.out.println("Size of file: " + fis.available() + " bytes.");
+				}
+				
+				catch (IOException ioe)
+				{
+					ioe.printStackTrace();
+				}
+				
+				finally
+				{
+					try
+					{
+						if(fis!=null)
+							fis.close();
+					}
+					
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}
+		
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
+			
+		finally
+		{
+			try
+			{
+				if (br != null)br.close();
+				System.out.print("\n...File closed...\n");
+			}
+				
+			catch (IOException ioe)
+			{
+				ioe.printStackTrace();
+			}
+		}
+	}
+	
+	//DELETE SPECIFIED FILE
+	public void deleteFile()
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		try
+		{
+			System.out.println("Enter the directory: ");
+			String searchDir = userInput.nextLine();
+			System.out.println("Type the file name and extension you wish to delete: ");
+			String deleteThisFile = userInput.nextLine();
+			System.out.print("...Attempting to delete file...\n\n");
+			
+			File file = new File("/Users/heatherchan/Desktop/" + searchDir+ "/" + deleteThisFile);
+		
+			if (file.delete())
+			{
+				
+				System.out.println("Deletion successful: " + file.getName() + " has been deleted!");
+			}
+		
+			else
+				System.out.println("Unable to delete file.");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		//userInput.close();
+	}
+	
+	//WRITE TO A FILE
+	public void writeToFile()
+	{
+		Scanner userInput = new Scanner(System.in);
+		try
+		{
+			System.out.println("What do you want to write to the file?");
+			String userContent = userInput.nextLine();
+			String content = userContent;
+			
+			System.out.println("Which directory is the file located in? ");
+			String userSelectsDir = userInput.nextLine();
+			
+			System.out.println("Enter the file name and its extension you wish to write to: ");
+			String userSelectsFile = userInput.nextLine();
+			File file = new File ("/Users/heatherchan/Desktop/" + userSelectsDir+ "/" + userSelectsFile);
+			
+			if (!file.exists())
+			{
+				file.createNewFile();
+			}
+			
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(content);
+			bw.close();
+			
+			System.out.println("done");
+		}
+		
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
+		
+		//userInput.close();
+	}
+	
+	//SEEK POSITION IN THE FILE
+	/*public void seek() throws IOException
+	{
+	
+		BufferedReader br = null;
+		
+		try
+		{
+			String sCurrentLine;
+		
+			br = new BufferedReader(new FileReader("/Users/heatherchan/Desktop/RootDir/first.txt"));
+			int counter = 0;
+			
+			while((sCurrentLine = br.readLine()) != null)
+			{
+				counter++;
+				if (counter == -1 || counter == 0 || counter == +1)
+				{
+					System.out.println("" + br.read());
+					if (counter == +1)
+						break;
+				}
+			}
+		}
+		
+		catch (IOException ioe)
+		{
+			System.out.println("Exception: " + ioe);
+		}
+		
+		finally 
+		{
+			try
+			{
+				if (br != null)
+					br.close();
+			}
+			
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}*/
+	
+	//RENAME SPECIFIED FILE
+	public void renameFile()
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		System.out.println("Enter name of directory: ");
+		String userSelectsDir = userInput.nextLine();
+		System.out.println("Enter the name of the file you wish to rename: ");
+		String userSelectsFile = userInput.nextLine();
+		
+		File oldfile = new File ("/Users/heatherchan/Desktop/" + userSelectsDir + "/" + userSelectsFile);
+		
+		System.out.println("What do you want the new file to be named?");
+		String userFileName = userInput.nextLine();
+		
+		File newfile = new File("/Users/heatherchan/Desktop/" + userSelectsDir + "/" +userFileName);
+		
+		if (oldfile.renameTo(newfile))
+		{
+			System.out.println("Rename succesful.");
+		}
+		
+		else
+			System.out.println("Rename failed.");
+		
+		//userInput.close();
+	}	
+	
+	public void renameDir()
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		System.out.println("Enter name of directory you want to rename: ");
+		String userSelectsDir = userInput.nextLine();
+		
+		File oldfile = new File ("/Users/heatherchan/Desktop/" + userSelectsDir);
+		
+		System.out.println("Enter the new name for the directory: ");
+		String userDirName= userInput.nextLine();
+		
+		File newfile = new File("/Users/heatherchan/Desktop/" + userDirName);
+		
+		if (oldfile.renameTo(newfile))
+		{
+			System.out.println("Rename succesful.");
+		}
+		
+		else
+			System.out.println("Rename failed.");
+	}
+	
+	public void moveFile()
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		System.out.println("Enter the directory where the file is located: ");
+		String userSelectsDir = userInput.nextLine();
+		System.out.println("Enter the text file you want to move: ");
+		String userSelectsFile = userInput.nextLine();
+		System.out.println("Enter the directory where you want the file moved to: ");
+		String moveFile = userInput.nextLine();
+		
+		try
+		{
+			File newfile = new File("/Users/heatherchan/Desktop/" + userSelectsDir + "/" + userSelectsFile);
+		
+			if (newfile.renameTo(new File ("/Users/heatherchan/Desktop/" + moveFile + "/" + newfile.getName())));
+			{
+				System.out.println("File has been moved.");
+			} 	
+		}
+		
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}	
+	}
+	
+	public void removeDir()
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		System.out.println("Enter the name of the directory you want to delete: ");
+		String userSelectsDir = userInput.nextLine();
+		
+		File directory = new File("/Users/heatherchan/Desktop/" + userSelectsDir);
+		
+		if (!directory.exists())
+		{
+			System.out.println("Directory does not exist.");
+			System.exit(0);
+		}
+		
+		else
+		{
+			try
+			{
+				delete(directory);
+			}
+			
+			catch (IOException ioe)
+			{
+				ioe.printStackTrace();
+			}
+				
+		}
+		System.out.println("Done.");
+	}
+	
+	public static void delete(File file) throws IOException
+	{
+		if(file.isDirectory())
+		{
+			if(file.list().length == 0)
+			{
+				file.delete();
+				System.out.println("Directory has been deleted: " + file.getAbsolutePath());
+			}
+			else
+			{
+				String files[] = file.list();
+				
+				for (String temp : files)
+				{
+					File fileDelete = new File(file, temp);
+					delete(fileDelete);
+				}
+				
+				if(file.list().length == 0)
+				{
+					file.delete();
+					System.out.println("Directory has been deleted: " + file.getAbsolutePath());
+				}
+			}
+		}
+		else 
+			file.delete();
+			System.out.println("File is deleted: " + file.getAbsolutePath());
+	}
+}
+
