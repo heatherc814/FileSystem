@@ -1,0 +1,119 @@
+import java.io.IOException;
+import java.util.Scanner;
+import java.io.RandomAccessFile;
+
+public class CreateFileMain 
+{
+	public static void main(String[] args) throws IOException
+	{
+		Scanner userInput = new Scanner(System.in);
+		
+		CreateFile cf = new CreateFile();
+		
+	while(true)
+	{
+		
+		System.out.printf("~ ~ ~ ~ ~ M E N U ~ ~ ~ ~ ~%n");
+		System.out.println("Available options:\n");
+		System.out.print("1. CREATE\n"+"2. OPEN\n"+"3. DELETE\n"+"4. WRITE\n"+
+				"5. SEEK\n" + "6. EXIT\n" + "- - - - - - - - - - - - - -\n\n" +
+				"7. RENAME A FILE (type 'rename')**\n" +
+				"8. RENAME DIRECTORY (type 'dir')**\n" + 
+				"9. MOVE TEXT FILE TO ANOTHER DIRECTORY (type 'move')**\n"+
+				"10. DELETE A DIRECTORY (type 'deletedir')** \n\n");
+		System.out.print("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~\n");
+			
+		String selection = userInput.next();
+		
+			if (selection.equalsIgnoreCase("create"))
+			{
+				cf.createNewFile();
+			}
+		
+			else if (selection.equalsIgnoreCase("open"))
+			{
+				cf.openFile();
+			}
+			
+			else if (selection.equalsIgnoreCase("delete"))
+			{
+				cf.deleteFile();
+		
+			}
+			
+			else if (selection.equalsIgnoreCase("write"))
+			{
+				cf.writeToFile();
+				
+			}
+			
+			else if (selection.equalsIgnoreCase("seek"))
+			{
+				try
+				{
+					System.out.println("Enter directory: ");
+					String userSelectsDir = userInput.next();
+					System.out.println("Enter file name and its extension: ");
+					String userSelectsFile = userInput.next();
+				
+					RandomAccessFile raf = new RandomAccessFile("/Users/heatherchan/Desktop/" 
+							+ userSelectsDir +"/"+ userSelectsFile, "r");
+				
+					System.out.println("Enter the base: ");
+					int userPosition = userInput.nextInt();
+					//System.out.println("Enter the offset");
+				
+					raf.seek(userPosition);
+					
+					String s = raf.readLine();
+					System.out.println(s);
+					
+					raf.close();
+				
+				}
+				catch (IOException ioe)
+				{
+					ioe.printStackTrace();
+				}
+			}
+			
+			else if (selection.equalsIgnoreCase("exit"))
+			{
+				System.out.print("...Exiting program...");
+				System.exit(0);	
+			}
+			
+			//this was just for fun
+			else if (selection.equalsIgnoreCase("rename"))
+			{
+				cf.renameFile();
+			}
+			
+			else if (selection.equalsIgnoreCase("dir"))
+			{
+				cf.renameDir();
+			}
+			
+			else if (selection.equalsIgnoreCase("move"))
+			{
+				cf.moveFile();
+			}
+			
+			else if (selection.equalsIgnoreCase("deletedir"))
+			{
+				cf.removeDir();
+			}
+			else
+				System.out.println("Invalid input. Try again.");
+			
+			//userInput.close();
+			
+		/**Quick way to 
+		 * create a new 
+		 * folder
+		 */
+		/*File dir = new File("/Users/heatherchan/Desktop/RootDir/Sub1");
+		dir.mkdir();*/
+		}
+	} 
+}
